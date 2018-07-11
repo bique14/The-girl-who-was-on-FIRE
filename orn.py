@@ -6,29 +6,41 @@ import time
 import datetime
 import pyrebase
 
+from pymongo import MongoClient
+
 start_time = time.time() # time for execute
 now = datetime.datetime.now() # now time
 
-firebase = pyrebase.initialize_app(CONFIG)
-db = firebase.database()
+connect = MongoClient('localhost', 27017)
+db = connect.get_database('orn')
+emp = db.fb_datas
 
-from_date = '2018-07-09'
+from_date = '2018-07-01' # first day
 to_date = now.strftime('%Y-%m-%d')
 bnk_name = 'bnk48official.orn'
 
 req = requests.get(URL + from_date + '/' + to_date + '/posts/column_chart')
 toJSON = json.loads(req.content)
 orn = toJSON['collectors'][bnk_name]
+
 for i, item in enumerate(orn):
-    db.child('orn').child(item['pcid']).child('url').set('http://facebook.com/'+item['pcid'])
-    db.child('orn').child(item['pcid']).child('date').set(item['date'])
-    db.child('orn').child(item['pcid']).child('comment_count').set(item['info']['comments_count'])
-    db.child('orn').child(item['pcid']).child('share_count').set(item['info']['shares_count'])
-    db.child('orn').child(item['pcid']).child('reactions').child('like').set(item['info']['reactions']['like'])
-    db.child('orn').child(item['pcid']).child('reactions').child('wow').set(item['info']['reactions']['wow'])
-    db.child('orn').child(item['pcid']).child('reactions').child('sad').set(item['info']['reactions']['sad'])
-    db.child('orn').child(item['pcid']).child('reactions').child('love').set(item['info']['reactions']['love'])
-    db.child('orn').child(item['pcid']).child('reactions').child('haha').set(item['info']['reactions']['haha'])
-    db.child('orn').child(item['pcid']).child('reactions').child('angry').set(item['info']['reactions']['angry'])
+    fb_id, post_id = item['pcid'].split('_')
+    emp.insert({
+        "_id": post_id,
+        "url": 'http://facebook.com/' + item['pcid'],
+        "info": {
+            "shares_count": item['info']['shares_count'],
+            "reactions": {
+                "wow": item['info']['reactions']['wow'],
+                "sad": item['info']['reactions']['sad'],
+                "love": item['info']['reactions']['love'],
+                "like": item['info']['reactions']['like'],
+                "haha": item['info']['reactions']['haha'],
+                "angry": item['info']['reactions']['angry']
+            },
+            "comments_count": item['info']['comments_count']
+        },
+        "date": item['date']
+    })
 
 print("--- %s seconds ---" % (time.time() - start_time))
