@@ -14,7 +14,7 @@ connect = MongoClient('localhost', 27017)
 db = connect.get_database('orn')
 emp = db.fb_datas
 
-from_date = '2018-07-01' # first day
+from_date = '2018-03-16' # first day: 2018-03-16
 to_date = now.strftime('%Y-%m-%d')
 bnk_name = 'bnk48official.orn'
 
