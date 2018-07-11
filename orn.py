@@ -1,7 +1,6 @@
 import requests
 import json
 from authfire import *
-
 import time
 import datetime
 import pyrebase
