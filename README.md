@@ -1,9 +1,9 @@
-# Playing with FIRE
+# ~~Playing with FIRE~~
 
-`fire : firebase `
+~~`fire : firebase `~~
 
-playground with firebase for collect data from [Orn's facebook](https://facebook.com/bnk48official.orn/
-) by [Pyrebase](https://github.com/thisbejim/Pyrebase)
+playground for collect data from [Orn's facebook](https://facebook.com/bnk48official.orn/
+) by MongoDB
 
 ![Alt Text](yo.gif)
 
