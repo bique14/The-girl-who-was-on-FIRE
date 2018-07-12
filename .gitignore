@@ -2,3 +2,6 @@ authfire.py
 example.json
 ornStructure.json
 __pycache__/
+node_modules/
+package-lock.json
+url.js
